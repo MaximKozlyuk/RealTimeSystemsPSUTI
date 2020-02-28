@@ -33,6 +33,7 @@ void endTask () {
 }
 
 void taskOne(void *arg) {
+    rt_sem_p(&sem_desc,TM_INFINITE);
     int i;
     for (i=0; i < ITER; i++) {
         rt_printf("I am taskOne and global = %d................\n", ++global);
@@ -41,6 +42,7 @@ void taskOne(void *arg) {
 }
 
 void taskTwo(void *arg) {
+    rt_sem_p(&sem_desc,TM_INFINITE);
     int i;
     for (i=0; i < ITER; i++) {
         rt_printf("I am taskTwo and global = %d----------------\n", --global);
@@ -67,14 +69,11 @@ int main(int argc, char* argv[]) {
 
     rt_sem_create(&sem_desc,"MySemaphore",SEM_INIT,SEM_MODE);
 
-    rt_task_start(&t3, &taskThree, 0);
-    rt_sem_p(&sem_desc,TM_INFINITE);
-
-    rt_task_start(&t2, &taskTwo, 0);
-    rt_sem_p(&sem_desc,TM_INFINITE);
-
     rt_task_start(&t1, &taskOne, 0);
+    rt_task_start(&t2, &taskTwo, 0);
+    rt_task_start(&t3, &taskThree, 0);
 
     rt_sem_delete(&sem_desc);
+
     return 0;
 }

@@ -38,7 +38,7 @@ void demo(void *arg) {
     // let the task run RUNTIME(=200) jiffies in steps of SPINTIME(=20) jiffies
     runtime = 0;
     while(runtime < EXECTIME) {
-        rt_timer_spin(SPINTIME*BASEPERIOD); // spin cpu doing nothing
+        rt_timer_spin(SPINTIME * BASEPERIOD); // spin cpu doing nothing
         // note: rt_timer_spin function does not accept jiffies only nanoseconds
         // deviates from timing conventions throughout the Xenomai API
         runtime = runtime + SPINTIME;

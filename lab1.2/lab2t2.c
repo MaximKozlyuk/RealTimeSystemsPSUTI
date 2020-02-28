@@ -30,17 +30,17 @@ void task2(void *arg) {
 	RTIME now, previous;
 	rt_task_set_periodic(NULL, TM_NOW, 2000000000); 
 	previous = rt_timer_read();
-	while (1) { 
+	while (1) {
 		//Wait for the next periodic release point.
 		//Make the current task wait for the next periodic release point in the processor time line.
-		rt_task_wait_period(NULL); 
+		rt_task_wait_period(NULL);
 		now = rt_timer_read();
+        printf("Bulychev and Kozlyuk\n");
 		printf(
 			"Time since last turn: %ld.%06ld ms\n",
 			(long)(now - previous) / 1000000, 
 			(long)(now - previous) % 1000000
-		); 
-		printf("Bulychev and Kozlyuk\n");
+		);
 		previous = now;
 	} 
 }
@@ -62,11 +62,11 @@ int main(int argc, char* argv[]) {
 	// stack as well as new memory mapped files or shared memory regions.
 	mlockall(MCL_CURRENT|MCL_FUTURE);
 
+    rt_task_create(&the_task2, "the_second_task", 0, 99, 0);
+    rt_task_start(&the_task2, &task2, NULL);
+
 	rt_task_create(&demo_task, "trivial", 0, 5, 0);
 	rt_task_start(&demo_task, &demo, NULL);
-
-	rt_task_create(&the_task2, "the_second_task", 0, 99, 0);
-	rt_task_start(&the_task2, &task2, NULL);
 
 	pause();
 
