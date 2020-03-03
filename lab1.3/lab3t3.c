@@ -29,6 +29,7 @@ int global = 0;
 
 void taskOne(void *arg) {
     rt_sem_p(&sem1, TM_INFINITE);
+    rt_sem_p(&sem1, TM_INFINITE);
     int i;
     for (i = 0; i < ITER; i++) {
         rt_printf("I am taskOne and global=%d\n", ++global);
@@ -39,9 +40,8 @@ void taskTwo(void *arg) {
     rt_sem_p(&sem1, TM_INFINITE);
     int i;
     for (i = 0; i < ITER; i++) {
-        rt_printf("I am taskTwo and global=%d\n", -global);
+        rt_printf("I am taskTwo and global=%d\n", --global);
     }
-    rt_sem_v(&sem1);
 }
 
 void taskThree(void *arg) {
@@ -49,6 +49,7 @@ void taskThree(void *arg) {
     for (i = 0; i < ITER; i++) {
         rt_printf("I am taskThree and global=%d\n", ++global);
     }
+    rt_sem_v(&sem1);
     rt_sem_v(&sem1);
 }
 
@@ -66,5 +67,8 @@ int main(int argc, char *argv[]) {
     rt_task_start(&t1, &taskOne, 0);
     rt_task_start(&t2, &taskTwo, 0);
     rt_task_start(&t3, &taskThree, 0);
+
+    rt_sem_broadcast(&sem1);
+    rt_sem_delete(&sem1);
     return 0;
 }
