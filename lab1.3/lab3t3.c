@@ -42,6 +42,7 @@ void taskTwo(void *arg) {
     for (i = 0; i < ITER; i++) {
         rt_printf("I am taskTwo and global=%d\n", --global);
     }
+    rt_sem_v(&sem1);
 }
 
 void taskThree(void *arg) {
