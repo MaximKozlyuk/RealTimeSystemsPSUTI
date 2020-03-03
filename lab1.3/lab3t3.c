@@ -31,7 +31,7 @@ void taskOne(void *arg) {
     rt_sem_p(&sem1, TM_INFINITE);
     int i;
     for (i = 0; i < ITER; i++) {
-        rt_printf("I am taskOne and global=%d 1\n", ++global);
+        rt_printf("I am taskOne and global=%d\n", ++global);
     }
 }
 
@@ -39,18 +39,17 @@ void taskTwo(void *arg) {
     rt_sem_p(&sem1, TM_INFINITE);
     int i;
     for (i = 0; i < ITER; i++) {
-        rt_printf("I am taskTwo and global=%d 2\n", -global);
+        rt_printf("I am taskTwo and global=%d\n", -global);
     }
-
     rt_sem_v(&sem1);
 }
 
 void taskThree(void *arg) {
     int i;
     for (i = 0; i < ITER; i++) {
-        rt_printf("I am taskThree and global=%d 3\n", ++global);
+        rt_printf("I am taskThree and global=%d\n", ++global);
     }
-    rt_sem_v(&sem2);
+    rt_sem_v(&sem1);
 }
 
 int main(int argc, char *argv[]) {
